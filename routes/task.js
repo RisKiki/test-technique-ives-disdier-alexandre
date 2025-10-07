@@ -8,26 +8,30 @@ const tasks = [{
     title: 'Task 1',
     description: 'Description 1',
     createdAt: new Date().toISOString(),
+    userId: 1,
 }, {
     id: uuidv4(),
     title: 'Task 2',
     description: 'Description 2',
     createdAt: new Date().toISOString(),
+    userId: 2,
 }, {
     id: uuidv4(),
     title: 'Task 3',
     description: 'Description 3',
     createdAt: new Date().toISOString(),
+    userId: 2,
 }];
 
 router.post('/', (req, res) => {
-  const { title, description } = req.body || {};
+  const { title, description, userId } = req.body || {};
 
   const newTask = {
     id: uuidv4(),
     title: title,
     description: description,
     createdAt: new Date().toISOString(),
+    userId: userId,
   };
 
   tasks.push(newTask);
@@ -35,7 +39,11 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  return res.status(200).json(tasks);
+  const { userId } = req.query || {};
+  if (userId) {
+    return res.status(200).json(tasks.filter(task => task.userId === userId));
+  }
+  return res.status(400).json({ error: 'userId is required' });
 });
 
 router.get('/:id', (req, res) => {
