@@ -1,9 +1,12 @@
 // app.js
 const express = require('express');
 const taskRouter = require('./routes/task');
+const authRouter = require('./routes/auth');
 const app = express();
 
 app.use(express.json());
+
+app.use('/auth', authRouter);
 
 app.use('/tasks', taskRouter);
 
